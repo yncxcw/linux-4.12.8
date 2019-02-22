@@ -13,6 +13,7 @@
  */
 #define SCHEDSTAT_VERSION 15
 
+
 static int show_schedstat(struct seq_file *seq, void *v)
 {
 	int cpu;
@@ -31,12 +32,15 @@ static int show_schedstat(struct seq_file *seq, void *v)
 
 		/* runqueue-specific stats */
 		seq_printf(seq,
-		    "cpu%d %u 0 %u %u %u %u %llu %llu %lu",
+		    "cpu%d %u 0 %u %u %u %u %llu %llu %lu %lu %llu",
 		    cpu, rq->yld_count,
 		    rq->sched_count, rq->sched_goidle,
 		    rq->ttwu_count, rq->ttwu_local,
 		    rq->rq_cpu_time,
-		    rq->rq_sched_info.run_delay, rq->rq_sched_info.pcount);
+		    rq->rq_sched_info.run_delay,
+            rq->rq_sched_info.pcount,
+            rq->load.weight,
+            rq->nr_running);
 
 		seq_printf(seq, "\n");
 

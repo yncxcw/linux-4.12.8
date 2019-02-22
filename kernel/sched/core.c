@@ -6058,7 +6058,7 @@ void __init sched_init(void)
 	init_sched_fair_class();
 
 	init_schedstats();
-
+                
 	scheduler_running = 1;
 }
 
