@@ -6641,9 +6641,6 @@ preempt:
 static struct task_struct *
 pick_next_task_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
 {
-	//added by cwei
-        //printk("load of the task %d %d %d \n", prev->se.avg.load_avg, prev->se.avg.load_sum, 
-        //            prev->se.avg.util_avg, prev->se.avg.util_sum);
     
     struct cfs_rq *cfs_rq = &rq->cfs;
 	struct sched_entity *se;
@@ -7612,7 +7609,7 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
 	cpu_rq(cpu)->cpu_capacity = capacity;
 	sdg->sgc->capacity = capacity;
 	sdg->sgc->min_capacity = capacity;
-    printk("cpu %d capacity %lu", cpu, capacity);
+        
 }
 
 void update_group_capacity(struct sched_domain *sd, int cpu)
