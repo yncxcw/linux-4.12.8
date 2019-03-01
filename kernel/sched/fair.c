@@ -8538,6 +8538,8 @@ redo:
 
 	ld_moved = 0;
 	if (busiest->nr_running > 1) {
+   
+                printk("busiest group %d", busiest->cpu);
 		/*
 		 * Attempt to move tasks. If find_busiest_group has found
 		 * an imbalance but busiest->nr_running <= 1, the group is
