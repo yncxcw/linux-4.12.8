@@ -8486,7 +8486,9 @@ static void trace_load_balance(int src_cpu, int dest_cpu, int num_task){
      
     return;
 }
-EXPORT_SYMBOL(trace_load_balance)
+
+
+EXPORT_SYMBOL(trace_load_balance);
 /*
  * Check this_cpu to ensure it is balanced within domain. Attempt to move
  * tasks if there is an imbalance.
