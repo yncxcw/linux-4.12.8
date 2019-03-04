@@ -8589,9 +8589,10 @@ more_balance:
 		local_irq_restore(rf.flags);
                 
                 
-                if(ld_moved > 0)
-                    int ret = trace_load_balance(env.src_cpu, env.dst_cpu, ld_moved);
-
+                if(ld_moved > 0){
+                    int ret;
+                    ret = trace_load_balance(env.src_cpu, env.dst_cpu, ld_moved);
+                }    
 		if (env.flags & LBF_NEED_BREAK) {
 			env.flags &= ~LBF_NEED_BREAK;
 			goto more_balance;
