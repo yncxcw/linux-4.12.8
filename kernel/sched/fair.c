@@ -8480,6 +8480,13 @@ static int should_we_balance(struct lb_env *env)
 	return balance_cpu == env->dst_cpu;
 }
 
+
+
+static void trace_load_balance(int src_cpu, int dest_cpu, int num_task){
+     
+    return;
+}
+EXPORT_SYMBOL(trace_load_balance)
 /*
  * Check this_cpu to ensure it is balanced within domain. Attempt to move
  * tasks if there is an imbalance.
@@ -8746,6 +8753,9 @@ out_one_pinned:
 
 	ld_moved = 0;
 out:
+        if(ld_moved > 0)
+            trace_load_balance(env.src_cpu, env.dst_cpu, ld_moved);
+            
 	return ld_moved;
 }
 
