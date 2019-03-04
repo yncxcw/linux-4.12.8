@@ -8482,11 +8482,12 @@ static int should_we_balance(struct lb_env *env)
 
 
 
-static void trace_load_balance(int src_cpu, int des_cpu, int num_task){
-     
-    
-    printk("%d   %d   %d", src_cpu, des_cpu, num_task);
-    return;
+static int trace_load_balance(int src_cpu, int des_cpu, int num_task){
+   
+    //avoid to be optimized by compiler
+    int temp_src_cpu = src_cpu, temp_des_cpu = des_cpu, temp_num_task = num_task;
+       
+    return 1;
 }
 
 
@@ -8589,7 +8590,7 @@ more_balance:
                 
                 
                 if(ld_moved > 0)
-                    trace_load_balance(env.src_cpu, env.dst_cpu, ld_moved);
+                    int ret = trace_load_balance(env.src_cpu, env.dst_cpu, ld_moved);
 
 		if (env.flags & LBF_NEED_BREAK) {
 			env.flags &= ~LBF_NEED_BREAK;
