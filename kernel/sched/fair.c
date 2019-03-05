@@ -8504,7 +8504,8 @@ static int should_we_balance(struct lb_env *env)
 
 
 static int __attribute__((optimize("O0"))) trace_load_balance(int src_cpu, int des_cpu, int num_task){
-       
+    
+    printk("%d %d %d", src_cpu, des_cpu, num_task); 
     return num_task;
 }
 
