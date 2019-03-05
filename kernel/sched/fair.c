@@ -8485,7 +8485,7 @@ static int should_we_balance(struct lb_env *env)
 static int trace_load_balance(int src_cpu, int des_cpu, int num_task){
    
     //avoid to be optimized by compiler
-    int temp_src_cpu = src_cpu, temp_des_cpu = des_cpu, temp_num_task = num_task;
+    printk("%d %d %d", src_cpu, des_cpu, num_task);
        
     return 1;
 }
