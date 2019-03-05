@@ -7852,6 +7852,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
 	if (sgs->sum_nr_running)
 		sgs->load_per_task = sgs->sum_weighted_load / sgs->sum_nr_running;
 
+        //looks like the group->group_weight = the # of CPUs in this group.
 	sgs->group_weight = group->group_weight;
 
 	sgs->group_no_capacity = group_is_overloaded(env, sgs);
@@ -8322,6 +8323,21 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
 force_balance:
 	/* Looks like there is an imbalance. Compute it */
 	calculate_imbalance(env, &sds);
+        //print load related information
+        if(sds.local && sds.busiest){
+            printk("local group: avgload %d agroupload %d grouputil %d nr_tasks", 
+                    sds.local_stat.avg_load,
+                    sds.local_stat.group_load,
+                    sds.local_stat.group_util,
+                    sds.local_stat.nr_numa_running);
+            
+            printk("businest group: avgload %d agroupload %d grouputil %d nr_tasks", 
+                    sds.busiest_stat.avg_load,
+                    sds.busiest_stat.group_load,
+                    sds.busiest_stat.group_util,
+                    sds.busiest_stat.nr_numa_running);
+        
+        }   
 	return sds.busiest;
 
 out_balanced:
