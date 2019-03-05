@@ -8482,12 +8482,12 @@ static int should_we_balance(struct lb_env *env)
 
 
 
-static int trace_load_balance(int src_cpu, int des_cpu, int num_task){
+static int __attribute__((optimize("O0"))) trace_load_balance(int src_cpu, int des_cpu, int num_task){
    
     //avoid to be optimized by compiler
     printk("%d %d %d", src_cpu, des_cpu, num_task);
        
-    return 1;
+    return num_task;
 }
 
 
@@ -8501,11 +8501,13 @@ static int load_balance(int this_cpu, struct rq *this_rq,
 			int *continue_balancing)
 {
 	int ld_moved, cur_ld_moved, active_balance = 0;
+        int ret=0;
 	struct sched_domain *sd_parent = sd->parent;
 	struct sched_group *group;
 	struct rq *busiest;
 	struct rq_flags rf;
 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(load_balance_mask);
+        
 
 	struct lb_env env = {
 		.sd		= sd,
@@ -8589,9 +8591,9 @@ more_balance:
 		local_irq_restore(rf.flags);
                 
                 
-                if(ld_moved > 0){
-                    int ret;
-                    ret = trace_load_balance(env.src_cpu, env.dst_cpu, ld_moved);
+                if(cur_ld_moved > 0){
+                    
+                    ret += trace_load_balance(env.src_cpu, env.dst_cpu, cur_ld_moved);
                 }    
 		if (env.flags & LBF_NEED_BREAK) {
 			env.flags &= ~LBF_NEED_BREAK;
