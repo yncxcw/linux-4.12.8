@@ -8325,16 +8325,18 @@ force_balance:
 	calculate_imbalance(env, &sds);
         //print load related information
         if(sds.local && sds.busiest){
-            printk("local group: avgload %lu agroupload %lu grouputil %lu nr_tasks %d", 
+            printk("local group: avgload %lu groupload %lu grouputil %lu groupcapacity %lu nr_tasks %d", 
                     sds.local_stat.avg_load,
                     sds.local_stat.group_load,
                     sds.local_stat.group_util,
+                    sds.local_stat.group_capacity,
                     sds.local_stat.nr_numa_running);
             
-            printk("businest group: avgload %lu agroupload %lu grouputil %lu nr_tasks %d", 
+            printk("businest group: avgload %lu agroupload %lu grouputil %lu groupcapacity %lu nr_tasks %d", 
                     sds.busiest_stat.avg_load,
                     sds.busiest_stat.group_load,
                     sds.busiest_stat.group_util,
+                     sds.local_stat.group_capacity
                     sds.busiest_stat.nr_numa_running);
         
         }   
