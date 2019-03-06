@@ -6990,6 +6990,10 @@ struct lb_env {
 
 	enum fbq_type		fbq_type;
 	struct list_head	tasks;
+        
+        //to track the migrated pid
+        int pids[10];
+        int pid_count;
 };
 
 /*
@@ -7344,6 +7348,10 @@ static void attach_tasks(struct lb_env *env)
 		list_del_init(&p->se.group_node);
 
 		attach_task(env->dst_rq, p);
+                
+                if(env->pid_count < 10){
+                    env->pids[env->pid_count++] = p->pid;
+                }
 	}
 
 	rq_unlock(env->dst_rq, &rf);
@@ -8324,7 +8332,7 @@ force_balance:
 	/* Looks like there is an imbalance. Compute it */
 	calculate_imbalance(env, &sds);
         //print load related information
-        if(sds.local && sds.busiest){
+        if(0){
             unsigned long local_cpu = cpumask_bits(sched_group_span(sds.local))[0];
             printk("local group: avgload %lu groupload %lu grouputil %lu groupcapacity %lu nr_tasks %d cpu %lu", 
                     sds.local_stat.avg_load,
@@ -8503,9 +8511,13 @@ static int should_we_balance(struct lb_env *env)
 
 
 
-static int __attribute__((optimize("O0"))) trace_load_balance(int src_cpu, int des_cpu, int num_task){
+static int __attribute__((optimize("O0"))) trace_load_balance(struct lb_env env, int num_task){
     
-    printk("%d %d %d", src_cpu, des_cpu, num_task); 
+    printk("migrate %d tasks", num_task);
+    int i=0;
+    for(i=0; i<env.pid_count; i++){
+        printk("%d %d %d", env.src_cpu, env.dst_cpu, env.pids[i]);
+    }
     return num_task;
 }
 
@@ -8538,6 +8550,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
 		.cpus		= cpus,
 		.fbq_type	= all,
 		.tasks		= LIST_HEAD_INIT(env.tasks),
+                .pid_count      =0
 	};
 
 	cpumask_and(cpus, sched_domain_span(sd), cpu_active_mask);
@@ -8612,8 +8625,9 @@ more_balance:
                 
                 if(cur_ld_moved > 0){
                     
-                    ret += trace_load_balance(env.src_cpu, env.dst_cpu, cur_ld_moved);
-                }    
+                    ret += trace_load_balance(env, cur_ld_moved);
+                }
+                
 		if (env.flags & LBF_NEED_BREAK) {
 			env.flags &= ~LBF_NEED_BREAK;
 			goto more_balance;
@@ -8993,6 +9007,7 @@ static int active_load_balance_cpu_stop(void *data)
 			 * about DST_PINNED.
 			 */
 			.flags		= LBF_DST_PINNED,
+                        .pid_count      = 0
 		};
 
 		schedstat_inc(sd->alb_count);
