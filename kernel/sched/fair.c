@@ -8332,7 +8332,7 @@ force_balance:
 	/* Looks like there is an imbalance. Compute it */
 	calculate_imbalance(env, &sds);
         //print load related information
-        if(0){    
+        if(sds.busiest && sds.local){    
         //if(sds.busiest && sds.local){
             unsigned long local_cpu = cpumask_bits(sched_group_span(sds.local))[0];
             printk("local group: avgload %lu groupload %lu grouputil %lu groupcapacity %lu nr_tasks %d cpu %lu", 
@@ -8766,7 +8766,7 @@ more_balance:
 			sd->balance_interval *= 2;
 	}
         
-        printk("%lu %lu %lu", sd->balance_interval, sd->min_interval, sd->max_interval);
+        //printk("%lu %lu %lu", sd->balance_interval, sd->min_interval, sd->max_interval);
 
 	goto out;
 
